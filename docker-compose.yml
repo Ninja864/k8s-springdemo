@@ -1,0 +1,9 @@
+version: '3'
+services:
+  springdemo:
+    build:
+        context: ./
+        dockerfile: ./Dockerfile
+    mem_reservation: 2g
+    ports:
+     - "8080:8080"
