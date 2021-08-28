@@ -1,10 +1,26 @@
 version: '3'
 services:
-  springdemo:
-    build:
-        context: ./
-        dockerfile: ./Dockerfile
-    image: my_spring_k8s:latest
-    mem_reservation: 2g
-    ports:
-     - "8080:8080"
+    mysql-standalone:
+        image: mysql:8.0
+        volumes:
+            - mysql-data:/var/lib/mysql
+        ports:
+            - "3306:3306"
+        restart: always
+        mem_reservation: 2g
+        environment:
+            MYSQL_ROOT_PASSWORD: admin
+            MYSQL_DATABASE: test
+            MYSQL_USER: admin
+            MYSQL_PASSWORD: admin
+    my_spring_k8s:
+        build:
+            context: ./
+            dockerfile: ./Dockerfile
+        depends_on:
+            - mysql-standalone
+        mem_reservation: 2g
+        ports:
+            - "8080:8080"
+volumes:
+    mysql-data:
