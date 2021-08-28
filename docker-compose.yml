@@ -4,6 +4,7 @@ services:
     build:
         context: ./
         dockerfile: ./Dockerfile
+    image: my_spring_k8s:latest
     mem_reservation: 2g
     ports:
      - "8080:8080"
