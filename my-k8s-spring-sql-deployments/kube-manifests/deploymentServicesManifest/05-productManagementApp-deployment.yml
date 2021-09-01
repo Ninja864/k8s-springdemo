@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: product-management-webapp
+  labels:
+    app: product-management-webapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: product-management-webapp
+  template:
+    metadata:
+      labels:
+        app: product-management-webapp
+    spec:
+      initContainers:
+        - name: init-db
+          image: busybox:1.31
+          command: ['sh', '-c', 'echo -e "Checking for the availability of MySQL Server deployment"; while ! nc -z mysql 3306; do sleep 1; printf "-"; done; echo -e "  >> MySQL DB Server has started";']
+      containers:
+        - name: product-management-webapp
+          image: niransingh07/my_spring_k8s:demo
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
